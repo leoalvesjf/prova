@@ -19,27 +19,30 @@ namespace ProvaPub.Controllers
         /// 
         /// </summary>
         ///        
-         
 
-        
-        TestDbContext _ctx;
-        public Parte2Controller(TestDbContext ctx)
+        private readonly TestDbContext _ctx;
+        private readonly ProductService _productService;
+        private readonly CustomerService _customerService;
+
+
+        public Parte2Controller(TestDbContext ctx, ProductService productService,CustomerService customerService)
         {
-            _ctx = ctx;
+            _ctx = ctx;            
+            _productService = productService;
+            _customerService = customerService;
         }
-        //adcionei page para forçar sempre passar uma pagina, assim evitamos qualquer intervençao humana
+        
         [HttpGet("products/{page}")] 
         public ProductList ListProducts(int page)
-        {
-            var productService = new ProductService(_ctx);
-            return productService.ListProducts(page);
+        {            
+            return _productService.ListProducts(page);
         }
 
         [HttpGet("customers")]
         public CustomerList ListCustomers(int page)
         {
-            var customerService = new CustomerService(_ctx);
-            return customerService.ListCustomers(page);
+            
+            return _customerService.ListCustomers(page);
         }
      
     }
