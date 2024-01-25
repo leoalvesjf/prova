@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using PagedList;
 using ProvaPub.Models;
 using ProvaPub.Repository;
 
@@ -13,9 +14,13 @@ namespace ProvaPub.Services
             _ctx = ctx;
         }
 
-        public CustomerList ListCustomers(int page)
+        public CustomerList ListCustomers(int page,int pageSize)
         {
-            return new CustomerList() { HasNext = false, TotalCount = 10, Customers = _ctx.Customers.ToList() };
+            
+            var customer = _ctx.Customers.ToPagedList(page, pageSize);
+
+            return new CustomerList() { HasNext = true, TotalCount = pageSize, Customers = customer.ToList() };
+            
         }
 
         public async Task<bool> CanPurchase(int customerId, decimal purchaseValue)
